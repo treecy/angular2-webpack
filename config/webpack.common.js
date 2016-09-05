@@ -35,19 +35,28 @@ module.exports = {
                 loader: 'html'
             }, 
             {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+                test: /\.(png|jpg|gif|svg|woff|woff2|ttf|eot|ico)$/,
                 loader: 'file?name=assets/[name].[hash].[ext]'
-            }, 
+                // loader: 'file?name=assets/[name].[ext]'
+            },
+
             {
                 test: /\.scss$/,
+                include: helpers.root('node_modules', 'ng2-blur-theme'),
+                loaders: ['css-to-string', 'css?sourceMap', 'resolve-url','sass?sourceMap']
+            },
+
+            {
+                test: /\.scss$/,
+                include: helpers.root('src'),
                 exclude: helpers.root('src', 'app'), //排除了 /src/app 目录下的 .css 文件
-                loader: ExtractTextPlugin.extract('style', 'css!sass')
+                loader: ExtractTextPlugin.extract('style', 'css!sass?sourceMap')
             },
 
             {
                 test: /\.scss$/,
                 include: helpers.root('src', 'app'),
-                loaders: ['raw', 'sass']
+                loaders: ['css-to-string', 'css?sourceMap', 'resolve-url','sass?sourceMap']
             },
 
             {
@@ -73,6 +82,10 @@ module.exports = {
         //自动注入 打包后的JS和CSS
         new HtmlWebpackPlugin({
             template: 'src/index.html'
+        }),
+
+        new webpack.ProvidePlugin({
+          jQuery: 'jquery'
         })
     ]
 };
