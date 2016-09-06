@@ -1,12 +1,5 @@
-block.main {
-  padding: 1em;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-  margin-top: 50px;
-  display: block;
+block#page{
+    width: 1000px;
+    margin: 40px auto;
 
-  &:after{
-    content: '';
-    background-image: url("../public/images/angular.png");
-  }
 }

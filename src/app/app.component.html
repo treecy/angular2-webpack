@@ -1,4 +1,10 @@
-<ng2-blur-theme>
-    <router-outlet></router-outlet>
-</ng2-blur-theme>
+<block id="page">
+    <ng2-blur-theme>
+        <div class="al-content">
+          <ba-content-top [title]="pageTitle"></ba-content-top>
+          <router-outlet></router-outlet>
+        </div>
+    </ng2-blur-theme>
+</block>
+
 
