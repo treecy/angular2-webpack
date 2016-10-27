@@ -4,7 +4,7 @@ import '../public/style/style.scss';
 import { ng2BlurThemeComponent } from 'ng2-blur-theme';
 import { BaContentTop } from 'ng2-blur-theme/theme/components';
 
-
+import { ReportService } from './services/report.service';
 
 @Component({
   selector: 'my-app',
@@ -14,5 +14,7 @@ import { BaContentTop } from 'ng2-blur-theme/theme/components';
 })
 
 export class AppComponent { 
-    pageTitle:string = "YDN レポート"
+    pageTitle:string = "YDN レポート";
+
+    constructor(private reportService: ReportService) {}
 }

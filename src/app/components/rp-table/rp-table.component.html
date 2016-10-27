@@ -1,0 +1,47 @@
+<div class="rp-table-container">
+
+    <!-- Table -->
+    <div class="rp-table-outer">
+        <table class="table rp-table">
+            <thead>
+                <tr class="rp-table-titles">
+                    <th *ngFor="let col of _option.columns">
+                        <a *ngIf="col.sort != false" (click)="sort(col.key)" class="sort-link sort">{{col.title}}</a>
+                        <span *ngIf="col.sort == false" class="sort-link">{{col.title}}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of pageBlock">
+                    <td *ngFor="let cell of _option.columns">{{row[cell.key] | cellDisplay: cell}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="rp-table-footer row">
+        <div class="col-sm-6">
+            <label for="">表示件数</label>
+            <div class="btn-group">
+              <button class="btn btn-primary btn-xs" [(ngModel)]="perPage" btnRadio="20" (ngModelChange)="pageNumChange()">20</button>
+              <button class="btn btn-primary btn-xs" [(ngModel)]="perPage" btnRadio="50" (ngModelChange)="pageNumChange()">50</button>
+              <button class="btn btn-primary btn-xs" [(ngModel)]="perPage" btnRadio="100" (ngModelChange)="pageNumChange()">100</button>
+              
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <pagination class="pagination-sm" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                [totalItems]="totalItems" 
+                [itemsPerPage]="_option.paging.itemsPerPage" 
+                [maxSize] = '_option.paging.maxSize'
+                [boundaryLinks] = "true"
+                [(ngModel)]="currentPage" 
+                (pageChanged)="pageChanged($event)">    
+            </pagination>
+        </div>
+    </div>
+
+    
+</div>
+
+

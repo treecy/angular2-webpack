@@ -1,0 +1,98 @@
+/*
+* @Author: Liu Cui
+* @Date:   2016-10-19 11:40:56
+* @Last Modified by:   Liu Cui
+* @Last Modified time: 2016-10-21 14:40:46
+*/
+@import 'conf';
+.rp-table-outer{
+    overflow-x: auto;
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 100%;
+    max-width: 100%;
+}
+
+.rp-table-container table.rp-table {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    border-collapse: collapse;
+    border-spacing: 0;
+    word-break: keep-all;
+    
+    th,
+    td {
+        border: 1px solid $border-light !important;
+        line-height: 20px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .rp-table-titles th{
+        background-color: $bg-color;
+        color: #666;
+        font-size: 14px;
+    }
+    
+    input {
+        line-height: 1.5 !important;
+    }
+    tbody {
+        font-size: 12px;
+        tr:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+    }
+    a.sort-link {
+        color: $default-text-l;
+        font-weight: $font-bolder;
+        &.sort {
+            font-weight: $font-bolder !important;
+            color: #f17a2c;
+            text-decoration: underline !important;
+            &::after {
+                border-bottom-color: #f17a2c !important;
+            }
+        }
+    }
+    .ng2-smart-actions {
+        width: 70px;
+        text-align: center;
+        .actions {
+            float: none;
+            text-align: center;
+        }
+    }
+    a.ng2-smart-action {
+        font-size: 14px !important;
+        color: $default-text-l;
+        padding: 0 5px;
+        display: inline-block;
+        &.ng2-smart-action-add-add {
+            font-size: 25px !important;
+        }
+    }
+}
+
+.rp-table-container .rp-table-footer{
+    overflow: hidden;
+    padding: 0 20px;
+}
+
+:host /deep/ .pagination{
+    float: right;
+    &> .disabled{
+        & > span, & > a{
+            background-color: rgba(255,255,255,.2);
+            border-color: #ccc;
+            color: #ccc;
+        }
+    }
+}
+
+
+
+nav.ng2-smart-pagination-nav {
+    display: flex;
+    justify-content: center;
+}

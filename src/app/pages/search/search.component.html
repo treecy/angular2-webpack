@@ -1,37 +1,73 @@
 <div class="widgets">
-    <div class="row">
-        <div class="col-md-12">
-            <ba-card title="レポート条件" baCardClass="with-scroll">
-                <form class="form-horizontal">
-                    <div class="form-group row">
-                        <label for="inputEmail3" class="col-sm-2 form-control-label">アカウント</label>
-                        <div class="col-sm-10">
-                            <ng2-select2 [optionList]="optionList">
-                                <option *ngFor="let option of optionList" value="{{option.account_id}}">{{option.account_name}}</option>
-                                
-                            </ng2-select2>
-                        </div>
+    <ba-card title="レポート条件" baCardClass="with-scroll">
+        <form class="form-horizontal" target="csvUploadIframe" action="/api/report/create" method="POST" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 form-control-label required">アカウント</label>
+                <div class="col-sm-10">        
+                    <ng2-select2 [(selectModel)]='reportService.result.account' [selectData]="accounts" >
+                        <option *ngFor="let option of accounts;let i=index;" [value]="i">{{option.account_name}}</option>
+                    </ng2-select2>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 form-control-label required">レポートタイプ</label>
+                <div class="col-sm-10">
+                    <div class="btn-group">
+                      <button class="btn btn-primary" [(ngModel)]="reportService.result.type" btnRadio="1" name="type">期間合計</button>
+                      <button class="btn btn-primary" [(ngModel)]="reportService.result.type" btnRadio="2" name="type">月間毎日</button>
+                      <input type="hidden" [value]="reportService.result.type" name="report_type">
                     </div>
-                    <div class="form-group row">
-                        <label for="inputPassword3" class="col-sm-2 form-control-label">レポートタイプ</label>
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                        </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 form-control-label required">集計期間</label>
+                <div class="col-sm-10">
+                    <div *ngIf="reportService.result.type == '1' ">
+                        <rp-datepicker title="----年--月--日" mode="day" name="report_start" 
+                            [datepickerModel]="reportService.result.report_start"></rp-datepicker>
+                        <rp-datepicker title="----年--月--日" mode="day" name="report_end" 
+                            [datepickerModel]="reportService.result.report_end"></rp-datepicker>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                                <ba-checkbox [(ngModel)]="isRemember" [label]="'Remember me'" [ngModelOptions]="{standalone: true}"></ba-checkbox>
-                            </div>
-                        </div>
+
+                    <div *ngIf="reportService.result.type == '2' ">
+                        <rp-datepicker title="----年--月" mode="month" name="report_start"
+                            [datepickerModel]="reportService.result.month"
+                            (onChanged)="monthChangeCallback($event)"></rp-datepicker>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-warning">レポートを作成</button>
-                        </div>
-                    </div>
-                </form>
-            </ba-card>
-        </div>
-    </div>
+                    
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="reportService.result.type == '1' ">
+                <label for="inputPassword3" class="col-sm-2 form-control-label">外部CSV</label>
+                <div class="col-sm-10">
+                    <p class="row">
+                        <span class="col-sm-5"><input (change)="fileChangeCallback($event)" type="file" class="form-control" name="client_file" ></span>
+                        <button class="btn btn-default" (click)="fileUploadEl && fileUploadEl.value=''">削除</button>
+                    </p>
+                    
+                    <p class="row col-sm-12" *ngIf="fileErrorMsg"><span class="error-msg">{{fileErrorMsg}}</span></p>
+                    
+                </div>
+                
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button class="btn btn-warning submit-btn" 
+                        [disabled]="
+                            beginLoad
+                            || (reportService.result.type == 1 && !(reportService.result.report_start.date && reportService.result.report_end.date))
+                            || (reportService.result.type == 2 && !reportService.result.month.date)"
+                        (click)="submit()">
+                            <em *ngIf="beginLoad">
+                                <i class="fa fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+                                作成中です
+                            </em>
+                            <em *ngIf="!beginLoad">レポートを作成</em>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ba-card>
 </div>

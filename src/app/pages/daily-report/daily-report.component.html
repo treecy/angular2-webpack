@@ -1,0 +1,24 @@
+<ba-card [title]="reportTitle" baCardClass="with-scroll">
+    <form class="form-horizontal">
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-1 form-control-label">表示項目</label>
+            <div class="col-sm-11">
+                <div class="col-sm-2" *ngFor="let item of items">
+                    <label class="radio-inline custom-radio nowrap">
+                      <input type="radio" name="currentItem" 
+                        [value]="item"
+                        [(ngModel)]="currentItem"
+                        (ngModelChange)="itemChanged()">
+                      <span>{{langJP[item]}}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="table-wrapper">
+        <!-- <ng2-smart-table [settings]="tableSettings" [source]="source"></ng2-smart-table> -->
+        <rp-table [dataSource]="source" [tableOption]="tableSettings" ></rp-table>
+    </div>
+    
+    <p><button class="btn btn-default" [routerLink]="['/search']">戻す</button></p>
+</ba-card>

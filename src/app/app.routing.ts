@@ -2,18 +2,23 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 import { SearchComponent } from './pages/search/search.component';
+import { SumReportComponent } from './pages/sum-report/sum-report.component';
+import { DailyReportComponent } from './pages/daily-report/daily-report.component';
 
 const appRoutes: Routes = [{
     path: 'search',
     component: SearchComponent
+}, {
+    path: 'sumReport',
+    component: SumReportComponent
+}, {
+    path: 'dailyReport',
+    component: DailyReportComponent
 }, {
     path: '',
     redirectTo: '/search',
     pathMatch: 'full'
 }];
 
-
-//使用 RouterModule.forRoot 方法，导出包含了路由数组的 routing 常量。
-//它返回一个配置好的路由模块，它将被加入到根 NgModule - AppModule 中。
 export const routing = RouterModule.forRoot(appRoutes);
 

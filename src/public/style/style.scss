@@ -1,3 +1,4 @@
+@import "./conf/conf";
 body {
     background: #0147A7;
     color: #fff;
@@ -6,4 +7,25 @@ body {
     h1.al-title{
         font-family: Garamond , "Times New Roman" , "游明朝" , "Yu Mincho" , "游明朝体" , "YuMincho" , "ヒラギノ明朝 Pro W3" , "Hiragino Mincho Pro" , "HiraMinProN-W3" , "HGS明朝E" , "ＭＳ Ｐ明朝" , "MS PMincho" , serif;
     } 
+
+    label.form-control-label{
+        text-align: right;
+
+        &:after{
+            content: '必須';
+            font-size: 12px;
+            margin-left: 10px;
+            color: #fff;
+            background-color: rgb(232, 75, 75);
+            padding: 2px;
+            border-radius: 2px;
+            opacity: 0;
+        }
+
+        &.required:after{
+            opacity: 1;
+        }
+    }
 }
+
+

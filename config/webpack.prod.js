@@ -1,9 +1,10 @@
 /*
- * 产品环境配置
+ * Production Envriment Config
  */
 
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
@@ -14,9 +15,9 @@ module.exports = webpackMerge(commonConfig, {
   devtool: 'source-map',
 
   output: {
-    path: helpers.root('dist'),
-    publicPath: '/',
-    filename: '[name].[hash].js',
+    path: helpers.root('..','public','assets'),
+    publicPath: '/assets/',
+    filename: 'js/[name].[hash].js',
     chunkFilename: '[id].[hash].chunk.js'
   },
 
@@ -25,11 +26,20 @@ module.exports = webpackMerge(commonConfig, {
   },
 
   plugins: [
-    new webpack.NoErrorsPlugin(), //如果出现任何错误，就终止构建
-    new webpack.optimize.DedupePlugin(), //检测完全相同 ( 以及几乎完全相同 ) 的文件，并把它们从输出中移除。
-    new webpack.optimize.UglifyJsPlugin(), //最小化 (minify) 生成的包儿。
-    new ExtractTextPlugin('[name].[hash].css'), //把内嵌的 css 抽取成外部文件，并为其文件名添加“缓存无效哈希”。
-    new webpack.DefinePlugin({  //用来定义环境变量，以便我们在自己的程序中引用它。
+    new webpack.NoErrorsPlugin(), //エラーが出たら、中止する
+    new webpack.optimize.DedupePlugin(), //重複ファイル検索 あったら削除
+    new webpack.optimize.UglifyJsPlugin({
+        beautify: false, //prod
+        mangle: { screw_ie8 : true, keep_fnames: true }, //prod 
+        compress: { screw_ie8: true }, //prod
+        comments: false //prod
+      }), //minify
+    new ExtractTextPlugin('css/[name].[hash].css'), 
+    new HtmlWebpackPlugin({
+        template: 'src/index.html',
+        filename: helpers.root('..') + '/fuel/app/views/index/index.php'
+    }),
+    new webpack.DefinePlugin({  //環境変数定義
       'process.env': {
         'ENV': JSON.stringify(ENV)
       }

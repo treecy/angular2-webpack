@@ -3,24 +3,31 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
+var blurThemeCss = new ExtractTextPlugin('css/[name].css');
+var appCss = new ExtractTextPlugin('css/[name].css');
+
 module.exports = {
     entry: {
-        // 在大多数现代浏览器中运行 Angular 2 程序时需要的标准填充物。
-        // 早点加载 Zone.js ，紧跟在其它 ES6 和 metadata 垫片 (shim) 之后。
+        // the standard polyfills we require to run Angular applications in most modern browsers.
         'polyfills': './src/polyfills.ts',
 
-        // 需要的提供商文件： Angular 2 、 Lodash 、 bootstrap.css 等
+        //the vendor files we need: Angular, lodash, bootstrap.css...
         'vendor': './src/vendor.ts',
 
-        // 应用代码
+        // our application code.
         'app': './src/main.ts'
     },
 
 
 
     resolve: {
-        // 一个明确的扩展名 ( 通过一个空白的扩展名字符串 '' 标记出来 )
-        extensions: ['', '.js', '.ts']
+        // an explicit extension (signified by the empty extension string, '') or
+        extensions: ['', '.js', '.ts'],
+
+        alias: {
+            'app-components': helpers.root('/src/app/components'),
+            '@angular': helpers.root('/node_modules/@angular')
+        }
     },
 
 
@@ -34,22 +41,32 @@ module.exports = {
                 test: /\.html$/,
                 loader: 'html'
             }, 
+            { 
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+                loader: "url-loader?limit=10000&mimetype=application/font-woff&name=fonts/[name].[hash].[ext]" 
+            },
+            { 
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+                loader: "file?name=fonts/[name].[hash].[ext]" 
+            },
             {
-                test: /\.(png|jpg|gif|svg|woff|woff2|ttf|eot|ico)$/,
-                loader: 'file?name=assets/[name].[hash].[ext]'
-                // loader: 'file?name=assets/[name].[ext]'
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'file?name=img/[name].[hash].[ext]'
             },
 
             {
                 test: /\.scss$/,
-                include: helpers.root('node_modules', 'ng2-blur-theme'),
+                include: [
+                    helpers.root('node_modules', 'ng2-blur-theme'),
+                    helpers.root('node_modules', 'ng2-smart-table'),
+                ],
                 loaders: ['css-to-string', 'css?sourceMap', 'resolve-url','sass?sourceMap']
             },
 
             {
                 test: /\.scss$/,
                 include: helpers.root('src'),
-                exclude: helpers.root('src', 'app'), //排除了 /src/app 目录下的 .css 文件
+                exclude: helpers.root('src', 'app'), 
                 loader: ExtractTextPlugin.extract('style', 'css!sass?sourceMap')
             },
 
@@ -61,27 +78,25 @@ module.exports = {
 
             {
                 test: /\.css$/,
-                exclude: helpers.root('src', 'app'), //排除了 /src/app 目录下的 .css 文件
-                loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+                exclude: helpers.root('src', 'app'), 
+                loader: appCss.extract('style', 'css?sourceMap')
             }, {
                 test: /\.css$/,
                 include: helpers.root('src', 'app'),
-                loader: 'raw' //通过 raw 加载器把它们加载成字符串
+                loader: 'raw' 
             }
         ]
     },
 
-
+    sassLoader: {
+        includePaths: ['src/public/style/conf']
+    },
 
     plugins: [
-        //这里标记出了三个 块儿 之间的等级体系： app -> vendor -> polyfills 
+        appCss,
+
         new webpack.optimize.CommonsChunkPlugin({
             name: ['app', 'vendor', 'polyfills']
-        }),
-
-        //自动注入 打包后的JS和CSS
-        new HtmlWebpackPlugin({
-            template: 'src/index.html'
         }),
 
         new webpack.ProvidePlugin({

@@ -9,5 +9,6 @@ import '@angular/router';
 import 'rxjs';
 import 'jquery';
 import 'bootstrap-loader';
+import 'font-awesome-sass-loader';
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...

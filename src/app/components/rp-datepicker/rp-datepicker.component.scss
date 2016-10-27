@@ -1,0 +1,34 @@
+.rp-datepicker{ 
+    width:200px; 
+    position: relative; 
+    display:inline-block; 
+    margin-right: 10px;
+
+    .datepicker-container .card{
+        position: absolute;
+        z-index: 99;
+        background-color: rgba(255,255,255,.9);
+        border-radius: 2px;
+        color: #333;
+
+        table{
+            th {
+                button.btn.btn-default{
+                    background-color: #7ecbf9;
+                }
+                small{}
+            }
+            td {
+                button.btn.btn-default{
+                    color: #2d90cc;
+                    border: none;
+
+                    &.active{
+                        background-color: #7ecbf9;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
